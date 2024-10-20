@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ngày Phụ Nữ Việt Nam 20/10</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Playwrite GB S", cursive;
+        font-optical-sizing: auto;
+      }
+
+      body {
+        background-color: #ffd0d0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        color: #4a4a4a;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      .header {
+        text-align: center;
+        padding: 2rem;
+        background-color: #a87676;
+        color: white;
+        margin-bottom: 2rem;
+      }
+
+      .member-selection {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .member-btn {
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 25px;
+        background-color: #ca8787;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1.1rem;
+      }
+
+      .member-btn:hover {
+        background-color: #a87676;
+        transform: translateY(-3px);
+      }
+
+      .message-container {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-top: 2rem;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.5s ease;
+      }
+
+      .message-container.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .message-content {
+        white-space: pre-line;
+        line-height: 1.6;
+      }
+
+      .floating-hearts {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1000;
+      }
+
+      .heart {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: #e1acac;
+        transform: rotate(45deg);
+        animation: floatUp 4s linear infinite;
+      }
+
+      .heart::before,
+      .heart::after {
+        content: "";
+        width: 20px;
+        height: 20px;
+        background: #e1acac;
+        border-radius: 50%;
+        position: absolute;
+      }
+
+      .heart::before {
+        left: -10px;
+      }
+
+      .heart::after {
+        top: -10px;
+      }
+
+      @keyframes floatUp {
+        0% {
+          transform: translateY(100vh) rotate(45deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100px) rotate(45deg);
+          opacity: 0;
+        }
+      }
+
+      .date {
+        font-size: 1.5rem;
+        color: #a87676;
+        margin-top: 1rem;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="floating-hearts"></div>
+
+    <header class="header">
+      <h1>Ngày Phụ Nữ Việt Nam 20/10</h1>
+      <div class="date">20.10.2024</div>
+    </header>
+
+    <main class="container">
+      <div class="member-selection">
+        <button class="member-btn" onclick="showMessage('nik1')">mai nik1</button>
+        <button class="member-btn" onclick="showMessage('nik2')">mai nik2</button>
+      </div>
+
+      <div id="messageContainer" class="message-container">
+        <div id="messageContent" class="message-content"></div>
+      </div>
+    </main>
+
+    <script>
+      const messages = {
+        who: `Người đang đó là ai?
+        Chọn một lần được đúng 1 lần thoi đó nên chọn kỹ nha!`,
+        nik1: `To my dearest nik1,
+        Chúc mừng ngày Phụ Nữ Việt Nam 20/10 nha!`,
+        nik2: `To my dearest nik2,
+        Chúc mừng ngày Phụ Nữ Việt Nam 20/10 nha!`,
+      };
+
+      const oneTimeMessage = (member) => {
+        if (member !== "who") {
+          localStorage.setItem("isDisabled", "true");
+          localStorage.setItem("selectedMember", member);
+        }
+        if (localStorage.getItem("isDisabled") === "true") {
+          const buttons = document.querySelectorAll(".member-btn");
+          for (let button of buttons) {
+            button.disabled = true;
+          }
+        }
+      };
+
+      function showMessage(member) {
+        oneTimeMessage(member);
+        const container = document.getElementById("messageContainer");
+        const content = document.getElementById("messageContent");
+
+        // Remove active class
+        container.classList.remove("active");
+
+        // Set new content
+        setTimeout(() => {
+          content.textContent = messages[member];
+          container.classList.add("active");
+        }, 300);
+
+        // Create more hearts
+        createHearts();
+      }
+
+      function createHearts() {
+        const container = document.querySelector(".floating-hearts");
+        for (let i = 0; i < 5; i++) {
+          const heart = document.createElement("div");
+          heart.classList.add("heart");
+          heart.style.left = Math.random() * 100 + "vw";
+          heart.style.animationDelay = Math.random() * 2 + "s";
+          container.appendChild(heart);
+
+          // Remove heart after animation
+          setTimeout(() => {
+            heart.remove();
+          }, 4000);
+        }
+      }
+
+      // Initial hearts
+      setInterval(createHearts, 300);
+
+      // Show initial message (Mẹ)
+      setTimeout(() => {
+        showMessage(localStorage.getItem("selectedMember") || "who");
+      }, 500);
+    </script>
+  </body>
+</html>
